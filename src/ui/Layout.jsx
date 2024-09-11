@@ -1,12 +1,10 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import NavBar from "./NavBar";
 
 function Layout() {
   return (
     <div>
-      <div className="flex">
-        <Link to={"/"}>Home</Link>
-        <Link to={"/about"}>About</Link>
-      </div>
+      <NavBar />
       <Outlet />
     </div>
   );
