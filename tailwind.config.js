@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         borderColor: "#DBDBDB", // Add your custom color
+        inputBorderColor: "#808A93",
       },
     },
   },
