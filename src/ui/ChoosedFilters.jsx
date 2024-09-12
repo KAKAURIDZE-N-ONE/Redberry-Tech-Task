@@ -34,7 +34,6 @@ function ChoosedFilters() {
     <div className="flex gap-[0.8rem] mt-[1.8rem] items-center">
       {choosedFilters.map((filter) => {
         const { values, field } = filter;
-        console.log(values);
         return values.map((value) => {
           if (field === "რეგიონი")
             return (

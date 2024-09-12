@@ -7,14 +7,19 @@ import Phone from "../../public/svgs/Phone.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import ArrowRight from "../../public/svgs/ArrowRight.svg";
 import Button from "../ui/Button";
-import Slider from "../ui/Slider";
+import EstatesSlider from "../ui/EstatesSlider";
+import { useEffect } from "react";
 
 function RealEstatePage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
+
   return (
-    <div className="wrapper">
+    <div className="wrapper pb-96">
       {/* Back button */}
       <img
         onClick={() => {
@@ -194,7 +199,7 @@ function RealEstatePage() {
       >
         გამოქვეყნების თარიღი 08/08/24
       </h1>
-      <Slider />
+      <EstatesSlider />
     </div>
   );
 }
