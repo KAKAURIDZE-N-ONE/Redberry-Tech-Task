@@ -33,8 +33,8 @@ function FiltersBarItem({ filter }) {
         <div
           style={{ left: filter === "რეგიონი" ? "-6px" : "0" }}
           onClick={(e) => e.stopPropagation()}
-          className="cursor-default absolute top-[53px] h-96 border
-          border-custom-borderColor rounded-[1rem]"
+          className="cursor-default absolute top-[53px] border
+          border-custom-borderColor rounded-[1rem] overflow-hidden"
         >
           <FilterOptionsWindow filter={filter} />
         </div>

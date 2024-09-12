@@ -2,7 +2,7 @@ import { IoCheckmarkSharp } from "react-icons/io5";
 
 function FilterOptionsRegion({ values }) {
   return (
-    <ul className="grid grid-rows-4 grid-flow-col gap-x-[5rem] gap-y-[1.5rem]">
+    <ul className="grid grid-rows-4 grid-flow-col gap-x-[5rem] gap-y-[1.5rem] mr-[6rem]">
       {values.map((value) => {
         return (
           <li key={value} className="flex items-center gap-[0.8rem]">
