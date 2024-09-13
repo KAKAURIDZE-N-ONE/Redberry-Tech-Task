@@ -1,6 +1,6 @@
 import { LuPlus } from "react-icons/lu";
 
-function Button({ children, icon, type, size, fontSize, clickFn }) {
+function Button({ children, icon, type, size, fontSize, clickFn, isInForm }) {
   const backgroundColor = type === "filled" ? "#F93B1D" : "#fff";
   const borderColor =
     type === "filled" ? "#F93B1D" : type === "erase" ? "#676E76" : "#F93B1D";
@@ -20,7 +20,8 @@ function Button({ children, icon, type, size, fontSize, clickFn }) {
   };
 
   return (
-    <div
+    <button
+      type={isInForm ? "submit" : "button"}
       style={BUTTON_STYLE}
       onClick={clickFn}
       className={`rounded-[1rem] ${type} inline-block cursor-pointer`}
@@ -37,7 +38,7 @@ function Button({ children, icon, type, size, fontSize, clickFn }) {
           {children}
         </h3>
       </div>
-    </div>
+    </button>
   );
 }
 

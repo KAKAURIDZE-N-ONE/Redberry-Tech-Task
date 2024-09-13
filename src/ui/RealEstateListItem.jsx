@@ -8,9 +8,9 @@ import { formatPrice } from "../helpers/formatPrice";
 function RealEstateListItem({ dataItem }) {
   return (
     <Link
-      to={`/estate/2`}
+      to={`/listing/2`}
       className="rounded-[1.4rem] cursor-pointer 
-      no-select"
+      no-select hover:shadow-custom-light shadow-none transition-all duration-200"
       draggable={false}
     >
       <div className="relative">

@@ -30,3 +30,7 @@ html {
     /* e.g., color or other styles */
   }
 }
+
+.file-input {
+  display: none;
+}

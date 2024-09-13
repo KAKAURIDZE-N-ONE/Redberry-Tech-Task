@@ -14,13 +14,14 @@ function Modal({ children }) {
     <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center">
       <div
         onClick={() => dispatch(updateAgentModalIsOpen(false))}
-        className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-20"
-        style={{ backdropFilter: "blur(4px)" }}
+        className="fixed top-0 left-0 right-0 bottom-0 "
+        style={{
+          backdropFilter: "blur(4px)",
+          backgroundColor: "#02152657",
+          opacity: "34",
+        }}
       ></div>
-
-      <div className="relative z-10 bg-white rounded-[1rem] shadow-lg p-4">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }
