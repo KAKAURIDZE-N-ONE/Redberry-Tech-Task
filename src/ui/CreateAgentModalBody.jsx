@@ -5,19 +5,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   getAgentDetails,
-  resetAgentInfo,
   updateAgentEmail,
   updateAgentModalIsOpen,
   updateAgentName,
   updateAgentPhone,
   updateAgentSurname,
-} from "../slices/mainSlice";
+} from "../slices/agentSlice";
 import Button from "./Button";
+import NormalInput from "./NormalInput";
+import { useCreateAgent } from "../hooks/useCreateAgent";
 
 function CreateAgentModalBody() {
   const dispatch = useDispatch();
   const [imagePreview, setImagePreview] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
   const { name, surname, email, phone } = useSelector(getAgentDetails);
+  const {
+    mutate: createAgent,
+    isLoading: isCreating,
+    error: creationError,
+  } = useCreateAgent();
 
   const {
     register,
@@ -37,6 +44,7 @@ function CreateAgentModalBody() {
   const surnameValue = watch("surname");
   const emailValue = watch("email");
   const phoneValue = watch("phone");
+  const fileValue = watch("file");
 
   useEffect(() => {
     if (nameValue !== name) {
@@ -63,43 +71,25 @@ function CreateAgentModalBody() {
     dispatch,
   ]);
 
-  const handleFileChange = (files) => {
-    const file = files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const fileValue = watch("file");
-
   useEffect(() => {
-    if (fileValue?.length > 0) {
-      handleFileChange(fileValue);
-    } else setImagePreview(null);
+    if (fileValue && fileValue.length > 0) {
+      const file = fileValue[0];
+      if (file) {
+        setAvatarFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      setImagePreview(null);
+      setAvatarFile(null);
+    }
   }, [fileValue]);
 
-  useEffect(() => {
-    return () => dispatch(resetAgentInfo());
-  }, [dispatch]);
-
   const onSubmit = (data) => {
-    console.log(data);
-  };
-
-  const validatePhoneNumber = (value) => {
-    if (!/^\d+$/.test(value)) {
-      return "ნუმერული სიმბოლოები";
-    }
-    if (!/^5\d{8}$/.test(value)) {
-      return "უნდა იყოს ფორმატის 5XXXXXXXX";
-    }
-    return true; // No error
+    createAgent({ ...data, avatarFile });
   };
 
   return (
@@ -115,141 +105,74 @@ function CreateAgentModalBody() {
       </h2>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-[6rem] flex flex-col gap-[2rem]"
+        className="mt-[6rem] flex flex-col gap-[4rem]"
       >
         {/* first row */}
         <div className="flex items-center gap-[3rem]">
           {/* name */}
-          <div className="flex flex-col gap-[0.4rem]">
-            <div className="flex flex-col gap-[0.5rem]">
-              <label
-                style={{ color: "#021526" }}
-                className="text-[1.4rem] font-medium"
-                htmlFor="name"
-              >
-                სახელი*
-              </label>
-              <input
-                style={{ border: "1px solid #808A93" }}
-                className="w-[38.4rem] h-[4.2rem] rounded-[0.6rem] text-[1.6rem] px-4"
-                id="name"
-                {...register("name", {
-                  required: "სავალდებულო",
-                  minLength: {
-                    value: 2,
-                    message: "მინიმუმ 2 სიმბოლო",
-                  },
-                })}
-              />
-            </div>
-            {errors.name && (
-              <div className="flex gap-[0.7rem] items-center">
-                <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
-                <p className="text-[1.4rem]" style={{ color: "#021526" }}>
-                  {errors.name.message}
-                </p>
-              </div>
-            )}
-          </div>
+          <NormalInput
+            register={register}
+            name="name"
+            label="სახელი*"
+            errors={errors}
+            validate={{
+              required: "სავალდებულო",
+              minLength: {
+                value: 2,
+                message: "მინიმუმ 2 სიმბოლო",
+              },
+            }}
+          />
           {/* surname */}
-          <div className="flex flex-col gap-[0.4rem]">
-            <div className="flex flex-col gap-[0.5rem]">
-              <label
-                style={{ color: "#021526" }}
-                className="text-[1.4rem] font-medium"
-                htmlFor="surname"
-              >
-                გვარი
-              </label>
-              <input
-                style={{ border: "1px solid #808A93" }}
-                className="w-[38.4rem] h-[4.2rem] rounded-[0.6rem] text-[1.6rem] px-4"
-                id="surname"
-                {...register("surname", {
-                  required: "სავალდებულო",
-                  minLength: {
-                    value: 2,
-                    message: "მინიმუმ 2 სიმბოლო",
-                  },
-                })}
-              />
-            </div>
-            {errors.surname && (
-              <div className="flex gap-[0.7rem] items-center">
-                <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
-                <p className="text-[1.4rem]" style={{ color: "#021526" }}>
-                  {errors.surname.message}
-                </p>
-              </div>
-            )}
-          </div>
+          <NormalInput
+            register={register}
+            name="surname"
+            label="გვარი"
+            errors={errors}
+            validate={{
+              required: "სავალდებულო",
+              minLength: {
+                value: 2,
+                message: "მინიმუმ 2 სიმბოლო",
+              },
+            }}
+          />
         </div>
         {/* second row */}
         <div className="flex items-center gap-[3rem]">
           {/* email */}
-          <div className="flex flex-col gap-[0.4rem]">
-            <div className="flex flex-col gap-[0.5rem]">
-              <label
-                style={{ color: "#021526" }}
-                className="text-[1.4rem] font-medium"
-                htmlFor="email"
-              >
-                ელ-ფოსტა*
-              </label>
-              <input
-                style={{ border: "1px solid #808A93" }}
-                className="w-[38.4rem] h-[4.2rem] rounded-[0.6rem] text-[1.6rem] px-4"
-                id="email"
-                type="email"
-                {...register("email", {
-                  required: "სავალდებულო",
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@redberry\.ge$/,
-                    message: "გამოიყენეთ @redberry.ge ფოსტა",
-                  },
-                })}
-              />
-            </div>
-            {errors.email && (
-              <div className="flex gap-[0.7rem] items-center">
-                <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
-                <p className="text-[1.4rem]" style={{ color: "#021526" }}>
-                  {errors.email.message}
-                </p>
-              </div>
-            )}
-          </div>
+          <NormalInput
+            register={register}
+            name="email"
+            label="ელ-ფოსტა*"
+            errors={errors}
+            validate={{
+              required: "სავალდებულო",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@redberry\.ge$/,
+                message: "გამოიყენეთ @redberry.ge ფოსტა",
+              },
+            }}
+          />
           {/* phone number */}
-          <div className="flex flex-col gap-[0.5rem]">
-            <label
-              style={{ color: "#021526" }}
-              className="text-[1.4rem] font-medium"
-              htmlFor="phone"
-            >
-              ტელეფონის ნომერი
-            </label>
-            <input
-              style={{ border: "1px solid #808A93" }}
-              className="w-[38.4rem] h-[4.2rem] rounded-[0.6rem] text-[1.6rem] px-4"
-              id="phone"
-              type="text"
-              {...register("phone", {
-                required: "სავალდებულო",
-                validate: validatePhoneNumber,
-              })}
-            />
-            {errors.phone && (
-              <div className="flex gap-[0.7rem] items-center">
-                <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
-                <p className="text-[1.4rem]" style={{ color: "#021526" }}>
-                  {errors.phone.message}
-                </p>
-              </div>
-            )}
-          </div>
+          <NormalInput
+            register={register}
+            name="phone"
+            label="ტელეფონის ნომერი"
+            errors={errors}
+            validate={{
+              required: "სავალდებულო",
+              validate: {
+                numeric: (value) =>
+                  /^\d+$/.test(value) || "ნუმერული სიმბოლოები",
+                format: (value) =>
+                  /^5\d{8}$/.test(value) || "უნდა იყოს ფორმატის 5XXXXXXXX",
+              },
+            }}
+          />
         </div>
         {/* File Input */}
-        <div>
+        <div className="relative">
           <label
             style={{ color: "#021526" }}
             className="text-[1.4rem] font-medium relative"
@@ -258,10 +181,11 @@ function CreateAgentModalBody() {
             ატვირთეთ ფოტო*
           </label>
           <label
-            style={{ border: "2px dashed #2D3648" }}
+            style={{ border: "2px dashed #808A93" }}
             className="flex items-center justify-center rounded-[0.5rem] h-[12rem] relative mt-3 cursor-pointer"
           >
             <input
+              accept="image/*"
               type="file"
               id="file"
               className="file-input"
@@ -287,7 +211,7 @@ function CreateAgentModalBody() {
             )}
           </label>
           {errors.file && (
-            <div className="flex gap-[0.7rem] items-center mt-2">
+            <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center mt-2">
               <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
               <p className="text-[1.4rem]" style={{ color: "#021526" }}>
                 {errors.file.message}

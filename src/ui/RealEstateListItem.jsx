@@ -3,7 +3,7 @@ import Bed from "../../public/svgs/Bed.svg";
 import Vector from "../../public/svgs/Vector.svg";
 import Vector2 from "../../public/svgs/Vector2.svg";
 import { Link } from "react-router-dom";
-import { formatPrice } from "../helpers/formatPrice";
+import { formatPrice } from "../utils/formatPrice";
 
 function RealEstateListItem({ dataItem }) {
   return (
@@ -22,7 +22,7 @@ function RealEstateListItem({ dataItem }) {
           <div className="relative">
             <div className="opacity-50">
               <h4 className="font-medium text-white text-[1.2rem] tracking-wide opacity-0">
-                {dataItem.type}
+                {dataItem?.type}
               </h4>
             </div>
             <h4

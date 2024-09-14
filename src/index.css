@@ -20,6 +20,12 @@ html {
   margin-right: auto;
 }
 
+.wrapper2 {
+  max-width: 79rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .no-select {
   user-select: none; /* Disable text selection */
 }
@@ -33,4 +39,45 @@ html {
 
 .file-input {
   display: none;
+}
+
+/* Hide the default radio button */
+.custom-radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Custom radio label */
+.custom-radio-label {
+  padding-left: 25px;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Create the custom radio button using ::before */
+.custom-radio-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 17px;
+  border: 1px solid black;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+/* Create the checked state using ::after */
+.custom-radio input[type="radio"]:checked + .custom-radio-label::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  background-color: black;
+  border-radius: 50%;
 }

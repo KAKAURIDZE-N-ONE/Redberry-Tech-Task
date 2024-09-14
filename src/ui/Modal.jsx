@@ -1,10 +1,6 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { updateAgentModalIsOpen } from "../slices/mainSlice";
 
-function Modal({ children }) {
-  const dispatch = useDispatch();
-
+function Modal({ children, turnOfFn, clearFn }) {
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => (document.body.style.overflow = "auto");
@@ -13,7 +9,10 @@ function Modal({ children }) {
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center">
       <div
-        onClick={() => dispatch(updateAgentModalIsOpen(false))}
+        onClick={() => {
+          turnOfFn();
+          if (clearFn) clearFn();
+        }}
         className="fixed top-0 left-0 right-0 bottom-0 "
         style={{
           backdropFilter: "blur(4px)",

@@ -12,8 +12,8 @@ const initialState = {
   },
 };
 
-export const counterSlice = createSlice({
-  name: "main",
+export const agentSlice = createSlice({
+  name: "agent",
   initialState,
   reducers: {
     updateAgentModalIsOpen: (state, action) => {
@@ -26,7 +26,6 @@ export const counterSlice = createSlice({
       state.createAgentModalValues.surname = action.payload;
     },
     updateAgentEmail(state, action) {
-      console.log(action.payload);
       state.createAgentModalValues.email = action.payload;
     },
     updateAgentPhone(state, action) {
@@ -45,9 +44,9 @@ export const {
   updateAgentEmail,
   updateAgentPhone,
   resetAgentInfo,
-} = counterSlice.actions;
+} = agentSlice.actions;
 
-export const getAgentModelIsOpen = (store) => store.main.agentModalIsOpen;
-export const getAgentDetails = (store) => store.main.createAgentModalValues;
+export const getAgentModelIsOpen = (store) => store.agent.agentModalIsOpen;
+export const getAgentDetails = (store) => store.agent.createAgentModalValues;
 
-export default counterSlice.reducer;
+export default agentSlice.reducer;

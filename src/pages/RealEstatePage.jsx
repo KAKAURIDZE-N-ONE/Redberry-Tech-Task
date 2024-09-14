@@ -8,9 +8,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import ArrowRight from "../../public/svgs/ArrowRight.svg";
 import Button from "../ui/Button";
 import EstatesSlider from "../ui/EstatesSlider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Modal from "../ui/Modal";
+import DeleteListingModalBody from "../ui/DeleteListingModalBody";
 
 function RealEstatePage() {
+  const [deleteListingModalIsOpen, setDeleteListingModalIsOpen] =
+    useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -20,6 +25,13 @@ function RealEstatePage() {
 
   return (
     <div className="wrapper pb-96">
+      {deleteListingModalIsOpen && (
+        <Modal turnOfFn={() => setDeleteListingModalIsOpen(false)}>
+          <DeleteListingModalBody
+            setDeleteListingModalIsOpen={setDeleteListingModalIsOpen}
+          />
+        </Modal>
+      )}
       {/* Back button */}
       <img
         onClick={() => {
@@ -186,7 +198,11 @@ function RealEstatePage() {
               </div>
             </div>
             <div>
-              <Button fontSize="1.2rem" type="erase">
+              <Button
+                clickFn={() => setDeleteListingModalIsOpen(true)}
+                fontSize="1.2rem"
+                type="erase"
+              >
                 ლისტინგის წაშლა
               </Button>
             </div>

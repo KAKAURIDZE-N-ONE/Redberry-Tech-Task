@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { updateAgentModalIsOpen } from "../slices/mainSlice";
+import { updateAgentModalIsOpen } from "../slices/agentSlice";
 import Button from "../ui/Button";
 import ChoosedFilters from "../ui/ChoosedFilters";
 import FiltersBar from "../ui/FiltersBar";
