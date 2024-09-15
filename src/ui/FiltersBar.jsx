@@ -1,11 +1,5 @@
 import FiltersBarItem from "./FiltersBarItem";
-
-const filters = [
-  "რეგიონი",
-  "საფასო კატეგორია",
-  "ფართობი",
-  "საძინებლების რაოდენობა",
-];
+import { filters } from "../data";
 
 function FiltersBar() {
   return (

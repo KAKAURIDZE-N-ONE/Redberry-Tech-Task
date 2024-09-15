@@ -1,10 +1,12 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { data } from "../data";
 import RealEstateListItem from "./RealEstateListItem";
 import SliderRightArrow from "../../public/svgs/SliderRightArrow.svg";
 import SliderLeftArrow from "../../public/svgs/SliderLeftArrow.svg";
+import { useQuery } from "@tanstack/react-query";
+import { getRealEstates } from "../services/apiRealEstates";
+import filterSliderData from "../utils/filterSliderData";
 
 const NextArrow = ({ onClick }) => (
   <div
@@ -24,9 +26,17 @@ const PrevArrow = ({ onClick }) => (
   </div>
 );
 
-function EstatesSlider() {
+function EstatesSlider({ regionId, currentRealEstateId }) {
+  const { data, isPending, error } = useQuery({
+    queryKey: ["real-estates"],
+    queryFn: getRealEstates,
+  });
+
+  const filteredData = filterSliderData(data, regionId, currentRealEstateId);
+  const sliderNeedFakeData = filteredData?.length < 4;
+
   var settings = {
-    infinite: true,
+    infinite: !sliderNeedFakeData,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 4,
@@ -34,20 +44,33 @@ function EstatesSlider() {
     prevArrow: <PrevArrow />,
   };
 
-  return (
-    <div className="relative mt-[7rem]">
-      <h2 className="text-[3.2rem] font-medium">ბინები მსგავს ლოკაციაზე</h2>
-      <div className="mt-20">
-        <Slider {...settings}>
-          {data.map((dataItem, i) => (
-            <div key={i} className="px-[1rem]">
-              <RealEstateListItem dataItem={dataItem} />
-            </div>
-          ))}
-        </Slider>
+  if (filteredData?.length === 0)
+    return (
+      <div className="relative mt-[7rem]">
+        <h2 className="text-[3.2rem] font-medium">
+          ბინები მსგავს ლოკაციაზე არ მოიძებნა
+        </h2>
       </div>
-    </div>
-  );
+    );
+  else
+    return (
+      <div className="relative mt-[7rem]">
+        <h2 className="text-[3.2rem] font-medium">ბინები მსგავს ლოკაციაზე</h2>
+        <div className="mt-20">
+          <Slider {...settings}>
+            {filteredData?.map((dataItem) => (
+              <div key={dataItem.id + dataItem.address} className="px-[1rem]">
+                <RealEstateListItem isInSlider={true} dataItem={dataItem} />
+              </div>
+            ))}
+            {sliderNeedFakeData &&
+              Array.from({ length: 4 - filteredData.length }, (el, i) => {
+                return <div key={i}></div>;
+              })}
+          </Slider>
+        </div>
+      </div>
+    );
 }
 
 export default EstatesSlider;

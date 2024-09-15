@@ -25,9 +25,11 @@ import {
 } from "../slices/listingSlice";
 import { getAgents } from "../services/apiAgents";
 import { validateWordLength } from "../utils/validation";
+import { useCreateRealEstate } from "../hooks/useCreateRealEstate";
 
 function AddListingPage() {
   const [imagePreview, setImagePreview] = useState(null);
+  const [avatarFile, setAvatarFile] = useState(null);
   const {
     selectedRegion,
     selectedCity,
@@ -44,7 +46,7 @@ function AddListingPage() {
 
   const navigate = useNavigate();
 
-  console.log(dealType);
+  const { mutate: createRealEstate, isPending, error } = useCreateRealEstate();
 
   const {
     data: agentsData,
@@ -94,17 +96,13 @@ function AddListingPage() {
     },
   });
 
-  // useEffect(() => {
-  //   dispatch(updateSelectedCity(filteredCitiesData?.at(0)));
-  //   console.log("updating");
-  // }, [dispatch, selectedRegion]);
-
   const addressValue = watch("address");
   const zipAddressValue = watch("zipAddress");
   const priceValue = watch("price");
   const areaValue = watch("area");
   const roomsQuantityValue = watch("roomsQuantity");
   const descriptionValue = watch("description");
+  const fileValue = watch("file");
 
   useEffect(() => {
     if (addressValue !== address) dispatch(updateAddress(addressValue));
@@ -132,30 +130,38 @@ function AddListingPage() {
     dispatch,
   ]);
 
-  const fileValue = watch("file");
-
   useEffect(() => {
-    if (fileValue?.length > 0) {
-      handleFileChange(fileValue);
-    } else setImagePreview(null);
+    if (fileValue && fileValue.length > 0) {
+      const file = fileValue[0];
+      if (file) {
+        setAvatarFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      setImagePreview(null);
+      setAvatarFile(null);
+    }
   }, [fileValue]);
 
+  const { id: agent_id } = selectedAgent;
+  const { id: city_id } = selectedCity;
+  const { id: region_id } = selectedRegion;
+
   function onSubmit(data) {
-    console.log(data);
+    if (!region_id || !city_id || !agent_id || !dealType) return;
+    createRealEstate({
+      ...data,
+      agent_id,
+      region_id,
+      city_id,
+      dealType: dealType === "ქირავდება" ? 1 : 0,
+      avatarFile,
+    });
   }
-
-  const handleFileChange = (files) => {
-    const file = files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleOptionChange = (event) => {
     const value = event.target.value;
@@ -438,7 +444,7 @@ function AddListingPage() {
           </div>
         </div>
         <div className="flex items-center gap-[2rem] justify-end mt-[9.5rem]">
-          <Button clickFn={() => navigate(-1)}>გაუქმება</Button>
+          <Button clickFn={() => navigate("/")}>გაუქმება</Button>
           <Button isInForm={true} type="filled">
             დაამატე ლისტინგი
           </Button>

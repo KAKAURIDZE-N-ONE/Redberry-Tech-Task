@@ -2,13 +2,35 @@ import Location from "../../public/svgs/Location.svg";
 import Bed from "../../public/svgs/Bed.svg";
 import Vector from "../../public/svgs/Vector.svg";
 import Vector2 from "../../public/svgs/Vector2.svg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../utils/formatPrice";
 
-function RealEstateListItem({ dataItem }) {
+function RealEstateListItem({ dataItem, isInSlider }) {
+  const {
+    is_rental,
+    image,
+    city,
+    price,
+    address,
+    bedrooms,
+    area,
+    zip_code,
+    id,
+  } = dataItem;
+  const navigate = useNavigate();
+
+  function handleRealEstateClick() {
+    navigate(`/listing/${id}`);
+    if (isInSlider) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  const type = is_rental ? "ქირავდება" : "იყიდება";
+
   return (
-    <Link
-      to={`/listing/2`}
+    <div
+      onClick={handleRealEstateClick}
       className="rounded-[1.4rem] cursor-pointer 
       no-select hover:shadow-custom-light shadow-none transition-all duration-200"
       draggable={false}
@@ -22,14 +44,14 @@ function RealEstateListItem({ dataItem }) {
           <div className="relative">
             <div className="opacity-50">
               <h4 className="font-medium text-white text-[1.2rem] tracking-wide opacity-0">
-                {dataItem?.type}
+                {type}
               </h4>
             </div>
             <h4
               className=" top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
                   absolute font-medium text-white text-[1.2rem] tracking-wide opacity-1"
             >
-              {dataItem.type}
+              {type}
             </h4>
           </div>
         </div>
@@ -38,7 +60,7 @@ function RealEstateListItem({ dataItem }) {
           style={{
             width: "100%",
             aspectRatio: "1.250",
-            backgroundImage: `url(${dataItem.img})`,
+            backgroundImage: `url(${image})`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
             backgroundSize: "cover",
@@ -51,9 +73,7 @@ function RealEstateListItem({ dataItem }) {
       >
         <div>
           <div className="flex flex-col gap-[0.6rem]">
-            <p className="font-bold text-[2.8rem]">
-              {formatPrice(dataItem.price)} ₾
-            </p>
+            <p className="font-bold text-[2.8rem]">{formatPrice(price)} ₾</p>
             <div className="flex items-center gap-[0.4rem]">
               <img
                 src={Location}
@@ -64,7 +84,7 @@ function RealEstateListItem({ dataItem }) {
                 className="text-[1.6rem] font-normal"
                 style={{ text: "#021526B2" }}
               >
-                {dataItem.address}
+                {city?.name} {address}
               </p>
             </div>
           </div>
@@ -76,7 +96,7 @@ function RealEstateListItem({ dataItem }) {
               style={{ color: "#021526B2" }}
               className="text-[1.6rem] font-normal"
             >
-              {dataItem.roomsQuantity}
+              {bedrooms}
             </p>
           </div>
           <div className="flex items-center gap-[0.5rem]">
@@ -85,7 +105,7 @@ function RealEstateListItem({ dataItem }) {
               style={{ color: "#021526B2" }}
               className="text-[1.6rem] font-normal"
             >
-              {dataItem.space}
+              {area}
             </p>
             <div className="relative">
               <p
@@ -108,12 +128,12 @@ function RealEstateListItem({ dataItem }) {
               style={{ color: "#021526B2" }}
               className="text-[1.6rem] font-normal"
             >
-              {dataItem.zipAddress}
+              {zip_code}
             </p>
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

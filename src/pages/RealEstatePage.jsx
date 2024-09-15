@@ -11,12 +11,22 @@ import EstatesSlider from "../ui/EstatesSlider";
 import { useEffect, useState } from "react";
 import Modal from "../ui/Modal";
 import DeleteListingModalBody from "../ui/DeleteListingModalBody";
+import { useQuery } from "@tanstack/react-query";
+import { getRealEstate } from "../services/apiRealEstates";
+import { formatPrice } from "../utils/formatPrice";
+import { formatDateFromTimestamp } from "../utils/formatDate";
 
 function RealEstatePage() {
   const [deleteListingModalIsOpen, setDeleteListingModalIsOpen] =
     useState(false);
 
   const { id } = useParams();
+
+  const { data, isPending, error } = useQuery({
+    queryKey: ["real-estate", id],
+    queryFn: () => getRealEstate(id),
+  });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +38,7 @@ function RealEstatePage() {
       {deleteListingModalIsOpen && (
         <Modal turnOfFn={() => setDeleteListingModalIsOpen(false)}>
           <DeleteListingModalBody
+            realEstateId={id}
             setDeleteListingModalIsOpen={setDeleteListingModalIsOpen}
           />
         </Modal>
@@ -35,7 +46,7 @@ function RealEstatePage() {
       {/* Back button */}
       <img
         onClick={() => {
-          navigate(-1);
+          navigate("/");
         }}
         src={ArrowRight}
         alt="arrow right"
@@ -48,8 +59,7 @@ function RealEstatePage() {
         <div style={{ width: "55%", aspectRatio: "1.250" }}>
           <div
             style={{
-              backgroundImage:
-                "url(https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)",
+              backgroundImage: `url(${data?.image})`,
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
               backgroundSize: "cover",
@@ -63,7 +73,9 @@ function RealEstatePage() {
           <div className="flex flex-col gap-[4rem]">
             <div className="flex flex-col gap-[2.4rem]">
               {/* Price */}
-              <h1 className="text-[4.8rem] font-bold">80, 458 ₾</h1>
+              <h1 className="text-[4.8rem] font-bold">
+                {formatPrice(data?.price)} ₾
+              </h1>
 
               {/* Property Information */}
               <div className="flex flex-col gap-[1.6rem]">
@@ -77,7 +89,7 @@ function RealEstatePage() {
                     className="text-[2.4rem] font-normal"
                     style={{ color: "#808A93" }}
                   >
-                    თბილისი, ი. ჭავჭავაძის 54
+                    {data?.city?.name}, {data?.address}
                   </p>
                 </div>
 
@@ -92,7 +104,7 @@ function RealEstatePage() {
                     className="text-[2.4rem] font-normal"
                     style={{ color: "#808A93" }}
                   >
-                    ფართი 55
+                    ფართი {data?.area}
                   </p>
                   <div className="relative">
                     <p
@@ -121,7 +133,7 @@ function RealEstatePage() {
                     className="text-[2.4rem] font-normal"
                     style={{ color: "#808A93" }}
                   >
-                    საძინებელი 2
+                    საძინებელი {data?.bedrooms}
                   </p>
                 </div>
 
@@ -136,7 +148,7 @@ function RealEstatePage() {
                     className="text-[2.4rem] font-normal"
                     style={{ color: "#808A93" }}
                   >
-                    საფოსტო ინდექსი 2525
+                    საფოსტო ინდექსი {data?.zip_code}
                   </p>
                 </div>
               </div>
@@ -148,9 +160,7 @@ function RealEstatePage() {
                 style={{ color: "#808A93" }}
                 className="text-[1.6rem] font-normal leading-[2.6rem]"
               >
-                იყიდება ბინა ჭავჭავაძის ქუჩაზე, ვაკეში. ბინა არის ახალი
-                რემონტით, ორი საძინებლითა და დიდი აივნებით. მოწყობილია ავეჯითა
-                და ტექნიკით.
+                {data?.description}
               </p>
             </div>
           </div>
@@ -159,8 +169,7 @@ function RealEstatePage() {
               <div className="flex items-center gap-5">
                 <div
                   style={{
-                    backgroundImage:
-                      "url(https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_3.jpg)",
+                    backgroundImage: `url(${data?.agent?.avatar})`,
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
                     backgroundSize: "cover",
@@ -168,7 +177,9 @@ function RealEstatePage() {
                   className="w-[7.2rem] h-[7.2rem] rounded-full"
                 ></div>
                 <div className="flex flex-col">
-                  <p className="text-[1.6rem] font-normal">სოფიო გელოვანი</p>
+                  <p className="text-[1.6rem] font-normal">
+                    {data?.agent?.name} {data?.agent?.surname}
+                  </p>
                   <p style={{ color: "#676E76" }} className="text-[1.4rem]">
                     აგენტი
                   </p>
@@ -182,7 +193,7 @@ function RealEstatePage() {
                     className="w-[1.6rem] h-[1.3rem]"
                   />
                   <p style={{ color: "#808A93" }} className="text-[1.4rem]">
-                    sophio.gelovani@redberry.ge
+                    {data?.agent?.email}
                   </p>
                 </div>
                 <div className="flex items-center gap-[0.5rem]">
@@ -192,7 +203,7 @@ function RealEstatePage() {
                     className="w-[1.3rem] h-[1.3rem]"
                   />
                   <p style={{ color: "#808A93" }} className="text-[1.4rem]">
-                    557 600 911
+                    {data?.agent?.phone}
                   </p>
                 </div>
               </div>
@@ -213,9 +224,12 @@ function RealEstatePage() {
         style={{ color: "#808A93" }}
         className="text-[1.6rem] text-center mt-3"
       >
-        გამოქვეყნების თარიღი 08/08/24
+        გამოქვეყნების თარიღი {formatDateFromTimestamp(data?.created_at)}
       </h1>
-      <EstatesSlider />
+      <EstatesSlider
+        currentRealEstateId={data?.id}
+        regionId={data?.city?.region_id}
+      />
     </div>
   );
 }

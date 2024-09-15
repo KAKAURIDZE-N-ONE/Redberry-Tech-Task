@@ -1,35 +1,53 @@
-import { useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 import FilterOptionsWindow from "./FilterOptionsWindow";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getLastOpenedFilter,
+  updateLastOpenedFilter,
+} from "../slices/filtersSlice";
 
 function FiltersBarItem({ filter }) {
-  const [filterValuesIsActive, setFilterValuesIsActive] = useState(false);
+  const lastOpenedFilter = useSelector(getLastOpenedFilter);
+  const dispatch = useDispatch();
 
-  const itemRef = useOutsideClick(() => setFilterValuesIsActive(false));
+  const itemRef = useOutsideClick(() => {
+    console.log(lastOpenedFilter, filter);
+    if (lastOpenedFilter === filter) {
+      dispatch(updateLastOpenedFilter(""));
+    }
+  });
 
   const LI_STYLE = {
-    backgroundColor: filterValuesIsActive ? "#F3F3F3" : "#fff",
+    backgroundColor: lastOpenedFilter === filter ? "#F3F3F3" : "#fff",
   };
+
+  function handleFilterBarItemClick(e) {
+    e.stopPropagation();
+    if (lastOpenedFilter === filter) {
+      dispatch(updateLastOpenedFilter(""));
+    } else {
+      dispatch(updateLastOpenedFilter(filter));
+    }
+  }
 
   return (
     <li
       style={LI_STYLE}
+      ref={itemRef} // Apply ref here
       className="py-[0.6rem] px-[1.4rem] flex gap-[0.4rem] items-center justify-center relative 
       cursor-pointer rounded-[0.6rem]"
-      key={filter}
-      ref={itemRef}
-      onClick={() => {
-        setFilterValuesIsActive(!filterValuesIsActive);
-      }}
+      onClick={handleFilterBarItemClick}
     >
       <h3 className="text-[1.6rem] font-medium select-none">{filter}</h3>
       <IoIosArrowDown
         className="transition-all duration-200"
-        style={{ transform: filterValuesIsActive ? "rotate(180deg)" : "" }}
+        style={{
+          transform: lastOpenedFilter === filter ? "rotate(180deg)" : "",
+        }}
         fontSize={14}
       />
-      {filterValuesIsActive && (
+      {lastOpenedFilter === filter && (
         <div
           style={{ left: filter === "რეგიონი" ? "-6px" : "0" }}
           onClick={(e) => e.stopPropagation()}

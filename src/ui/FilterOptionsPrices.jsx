@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getMinPrice, updateMinPrice } from "../slices/filtersSlice";
 
 function FilterOptionsPrices({ values, filter }) {
-  const [minPrice, setMinPrice] = useState();
-  const [maxPrice, setMaxPrice] = useState();
+  const minPrice = useSelector(getMinPrice);
+  const dispatch = useDispatch();
+  const [minPriceOrMinArea, setMinPriceOrMinArea] = useState();
+  const [maxPriceOrMaxArea, setMaxPriceOrMaxArea] = useState();
+
+  useEffect(() => {}, [minPriceOrMinArea, maxPriceOrMaxArea]);
 
   const value =
     filter === "საფასო კატეგორია" ? (
@@ -34,9 +40,13 @@ function FilterOptionsPrices({ values, filter }) {
         <div className="flex flex-col gap-[2.4rem]">
           <div className="relative">
             <input
-              style={{ border: "1px solid #808A93" }}
+              style={{
+                border: "1px solid #808A93",
+                WebkitAppearance: "none", // Disable arrows in Chrome, Safari, etc.
+                MozAppearance: "textfield", // Disable arrows in Firefox
+              }}
               value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
+              onChange={(e) => dispatch(updateMinPrice(e.target.value))}
               type="number"
               placeholder="დან"
               className="rounded-[0.6rem] h-[4.2rem] w-[15.5rem] p-[1rem]
@@ -80,7 +90,11 @@ function FilterOptionsPrices({ values, filter }) {
               {filter === "ფართობი" &&
                 values.map((value) => {
                   return (
-                    <div className="flex gap-2" key={value}>
+                    <div
+                      onClick={() => handleminPriceOrMinAreaClick(value)}
+                      className="flex gap-2"
+                      key={value}
+                    >
                       <p className="text-[1.4rem] font-normal">{value}</p>
                       <div className="relative">
                         <p
@@ -105,9 +119,13 @@ function FilterOptionsPrices({ values, filter }) {
         <div className="flex flex-col gap-[2.4rem]">
           <div className="relative">
             <input
-              style={{ border: "1px solid #808A93" }}
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
+              style={{
+                border: "1px solid #808A93",
+                WebkitAppearance: "none", // Disable arrows in Chrome, Safari, etc.
+                MozAppearance: "textfield", // Disable arrows in Firefox
+              }}
+              value={maxPriceOrMaxArea}
+              onChange={(e) => setMaxPriceOrMaxArea(e.target.value)}
               type="number"
               placeholder="მდე"
               className="rounded-[0.6rem] h-[4.2rem] w-[15.5rem] p-[1rem]

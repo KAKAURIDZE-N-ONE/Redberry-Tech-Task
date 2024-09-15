@@ -1,9 +1,22 @@
 import Button from "./Button";
 import DeleteX from "../../public/svgs/DeleteX.svg";
+import { deleteRealEstate } from "../services/apiRealEstates";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
-function DeleteListingModalBody({ setDeleteListingModalIsOpen }) {
+function DeleteListingModalBody({ setDeleteListingModalIsOpen, realEstateId }) {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   function turnOffModal() {
     setDeleteListingModalIsOpen(false);
+  }
+
+  async function handleDeleteClick() {
+    if (!realEstateId) return;
+    await deleteRealEstate(realEstateId);
+    queryClient.invalidateQueries("real-estates");
+    navigate("/");
   }
 
   return (
@@ -21,7 +34,9 @@ function DeleteListingModalBody({ setDeleteListingModalIsOpen }) {
         <h2 className="text-[2rem] font-normal">გსურთ წაშალოთ ლისტინგი?</h2>
         <div className="flex items-center gap-[1.5rem]">
           <Button clickFn={() => turnOffModal()}>გაუქმება</Button>
-          <Button type="filled">დადასტურება</Button>
+          <Button clickFn={() => handleDeleteClick()} type="filled">
+            დადასტურება
+          </Button>
         </div>
       </div>
     </div>

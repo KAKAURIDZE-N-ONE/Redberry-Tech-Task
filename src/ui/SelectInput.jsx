@@ -21,8 +21,6 @@ function CustomSelectInput({
     setIsOpen(false);
   };
 
-  console.log(selectedOption);
-
   return (
     <div className="flex flex-col gap-[0.4rem] relative">
       <div className="flex flex-col gap-[0.5rem]">
