@@ -12,7 +12,6 @@ function FiltersBarItem({ filter }) {
   const dispatch = useDispatch();
 
   const itemRef = useOutsideClick(() => {
-    console.log(lastOpenedFilter, filter);
     if (lastOpenedFilter === filter) {
       dispatch(updateLastOpenedFilter(""));
     }

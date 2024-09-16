@@ -1,35 +1,14 @@
 import { IoMdClose } from "react-icons/io";
-
-const choosedFilters = [
-  {
-    field: "რეგიონი",
-    values: ["თბილისი"],
-  },
-  {
-    field: "ფართობი",
-    values: [
-      {
-        from: 55,
-        to: 90,
-      },
-    ],
-  },
-  {
-    field: "საფასო კატეგორია",
-    values: [
-      {
-        from: 20000,
-        to: 100000,
-      },
-    ],
-  },
-  {
-    field: "საძინებლების რაოდენობა",
-    values: [1],
-  },
-];
+import useTransformQuery from "../hooks/useTransformQuery";
+import { useNavigate } from "react-router-dom";
+import { useRemoveFilterValue } from "../hooks/useRemoveFilterValue";
 
 function ChoosedFilters() {
+  const choosedFilters = useTransformQuery();
+  const navigate = useNavigate();
+
+  const removeFilterValue = useRemoveFilterValue();
+
   return (
     <div className="flex gap-[0.8rem] mt-[1.8rem] items-center">
       {choosedFilters.map((filter) => {
@@ -52,6 +31,7 @@ function ChoosedFilters() {
                   color="#021526CC"
                   fontSize={14}
                   className="cursor-pointer"
+                  onClick={() => removeFilterValue("regions", value)}
                 />
               </div>
             );
@@ -114,6 +94,9 @@ function ChoosedFilters() {
                   fontSize={14}
                   color="#021526CC"
                   className="ml-3 cursor-pointer"
+                  onClick={() =>
+                    removeFilterValue("area", value.from + "-" + value.to)
+                  }
                 />
               </div>
             );
@@ -137,6 +120,9 @@ function ChoosedFilters() {
                   color="#021526CC"
                   fontSize={14}
                   className="cursor-pointer"
+                  onClick={() =>
+                    removeFilterValue("price", value.from + "-" + value.to)
+                  }
                 />
               </div>
             );
@@ -157,13 +143,17 @@ function ChoosedFilters() {
                   color="#021526CC"
                   fontSize={14}
                   className="cursor-pointer"
+                  onClick={() => removeFilterValue("bedrooms", value)}
                 />
               </div>
             );
         });
       })}
       {choosedFilters.length > 0 && (
-        <p className="text-[1.4rem] font-medium ml-4 cursor-pointer">
+        <p
+          onClick={() => navigate("/")}
+          className="text-[1.4rem] font-medium ml-4 cursor-pointer"
+        >
           გასუფთავება
         </p>
       )}

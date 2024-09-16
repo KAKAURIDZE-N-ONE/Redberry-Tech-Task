@@ -444,7 +444,15 @@ function AddListingPage() {
           </div>
         </div>
         <div className="flex items-center gap-[2rem] justify-end mt-[9.5rem]">
-          <Button clickFn={() => navigate("/")}>გაუქმება</Button>
+          <Button
+            type="outline"
+            clickFn={() => {
+              window.scrollTo({ top: 0, behavior: "instant" });
+              navigate("/");
+            }}
+          >
+            გაუქმება
+          </Button>
           <Button isInForm={true} type="filled">
             დაამატე ლისტინგი
           </Button>

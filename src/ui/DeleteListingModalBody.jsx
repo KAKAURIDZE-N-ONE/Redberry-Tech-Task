@@ -33,7 +33,9 @@ function DeleteListingModalBody({ setDeleteListingModalIsOpen, realEstateId }) {
       <div className="flex flex-col gap-[3.5rem] items-center">
         <h2 className="text-[2rem] font-normal">გსურთ წაშალოთ ლისტინგი?</h2>
         <div className="flex items-center gap-[1.5rem]">
-          <Button clickFn={() => turnOffModal()}>გაუქმება</Button>
+          <Button type="outline" clickFn={() => turnOffModal()}>
+            გაუქმება
+          </Button>
           <Button clickFn={() => handleDeleteClick()} type="filled">
             დადასტურება
           </Button>

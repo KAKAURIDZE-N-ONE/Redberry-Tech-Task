@@ -1,16 +1,18 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
-export function useUpdateFiltersInURL(newFilterField, newFilterValue) {
+export function useUpdateFiltersInUrl() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const query = new URLSearchParams(location.search);
+  return function (newFilterField, newFilterValues) {
+    const query = new URLSearchParams(location.search);
 
-  const existingFilterValue = query.getAll(newFilterField);
+    // const existingFilterValues = query.get(newFilterField)?.split(",") || [];
 
-  if (!existingFilterValue.length) {
-    query.append(newFilterField, newFilterValue);
-  }
+    if (newFilterValues.length > 0)
+      query.set(newFilterField, newFilterValues.join(","));
+    else query.delete(newFilterField);
 
-  navigate(`?${query.toString()}`);
+    navigate(`?${query.toString()}`);
+  };
 }

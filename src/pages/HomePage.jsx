@@ -24,7 +24,7 @@ function HomePage() {
           </Button>
           <Button
             clickFn={() => dispatch(updateAgentModalIsOpen(true))}
-            type="outlinef"
+            type="outline"
             icon="plus"
           >
             აგენტის დამატება

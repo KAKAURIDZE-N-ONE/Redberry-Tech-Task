@@ -221,7 +221,10 @@ function CreateAgentModalBody() {
         </div>
         <div className="flex justify-end">
           <div className="flex items-center gap-6 mt-[7rem]">
-            <Button clickFn={() => dispatch(updateAgentModalIsOpen(false))}>
+            <Button
+              type="outline"
+              clickFn={() => dispatch(updateAgentModalIsOpen(false))}
+            >
               გაუქმება
             </Button>
             <Button isInForm={true} type="filled">

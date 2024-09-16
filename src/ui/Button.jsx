@@ -1,11 +1,30 @@
+import { useState } from "react";
 import { LuPlus } from "react-icons/lu";
 
 function Button({ children, icon, type, size, fontSize, clickFn, isInForm }) {
-  const backgroundColor = type === "filled" ? "#F93B1D" : "#fff";
+  const [isHovering, setIsHovering] = useState(false);
+  const backgroundColor =
+    type === "filled" && isHovering
+      ? "#DF3014"
+      : type === "filled" && !isHovering
+      ? "#F93B1D"
+      : type === "outline" && isHovering
+      ? "#F93B1D"
+      : type === "erase" && isHovering
+      ? "#808A93"
+      : "#fff";
+
+  console.log(backgroundColor);
   const borderColor =
     type === "filled" ? "#F93B1D" : type === "erase" ? "#676E76" : "#F93B1D";
   const color =
-    type === "filled" ? "#fff" : type === "erase" ? "#676E76" : "#F93B1D";
+    type === "filled" || (type === "outline" && isHovering)
+      ? "#fff"
+      : type === "erase" && !isHovering
+      ? "#676E76"
+      : type === "erase" && isHovering
+      ? "white"
+      : "#F93B1D";
 
   const BUTTON_STYLE = {
     backgroundColor,
@@ -27,13 +46,15 @@ function Button({ children, icon, type, size, fontSize, clickFn, isInForm }) {
 
   return (
     <button
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
       type={isInForm ? "submit" : "button"}
       style={BUTTON_STYLE}
       onClick={handleClick}
-      className={`rounded-[1rem] ${type} inline-block cursor-pointer`}
+      className={`rounded-[1rem]  inline-block cursor-pointer transition-all duration-200`}
     >
       <div className="w-full h-full flex items-center justify-center font-medium gap-[0.2rem]">
-        {icon === "plus" && <LuPlus fontSize={22} />}
+        {/* {icon === "plus" && <LuPlus fontSize={22} />} */}
         <h3
           style={{
             fontSize:

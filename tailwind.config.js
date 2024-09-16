@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         borderColor: "#DBDBDB", // Add your custom color
+        customRed: "#F93B1D",
       },
       boxShadow: {
         "custom-light": "4px 3px 11px rgba(0, 0, 0, 0.12)",

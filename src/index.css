@@ -93,3 +93,15 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.opacity-anime {
+  animation: opacityAnime 0.3s ease-in-out;
+}
+@keyframes opacityAnime {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

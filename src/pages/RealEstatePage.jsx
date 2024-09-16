@@ -46,7 +46,7 @@ function RealEstatePage() {
       {/* Back button */}
       <img
         onClick={() => {
-          navigate("/");
+          navigate(-1);
         }}
         src={ArrowRight}
         alt="arrow right"
