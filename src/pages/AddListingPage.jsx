@@ -29,7 +29,12 @@ import { validateWordLength } from "../utils/validation";
 import { useCreateRealEstate } from "../hooks/useCreateRealEstate";
 
 function AddListingPage() {
-  const [customErrors, setCustomErrors] = useState(null);
+  const [customErrors, setCustomErrors] = useState({
+    region_id: "",
+    city_id: "",
+    agent_id: "",
+    dealType: "",
+  });
   const [imagePreview, setImagePreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const {
@@ -47,7 +52,7 @@ function AddListingPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { mutate: createRealEstate, isPending, error } = useCreateRealEstate();
+  const { mutate: createRealEstate, isPending } = useCreateRealEstate();
 
   const { data: agentsData } = useQuery({
     queryKey: ["agents"],
@@ -144,8 +149,64 @@ function AddListingPage() {
   const { id: city_id } = selectedCity;
   const { id: region_id } = selectedRegion;
 
+  useEffect(() => {
+    if (dealType) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        dealType: "",
+      }));
+    }
+    if (selectedRegion?.id) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        region_id: "",
+      }));
+    }
+    if (selectedCity?.id) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        city_id: "",
+      }));
+    }
+    if (selectedAgent?.id) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        agent_id: "",
+      }));
+    }
+  }, [dealType, selectedRegion?.id, selectedCity?.id, selectedAgent?.id]);
+
   function onSubmit(data) {
-    if (!region_id || !city_id || !agent_id || !dealType) return;
+    if (!dealType) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        dealType: "სავალდებულო",
+      }));
+    }
+
+    if (!region_id) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        region_id: "სავალდებულო",
+      }));
+    }
+
+    if (!city_id) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        city_id: "სავალდებულო",
+      }));
+    }
+
+    if (!agent_id) {
+      setCustomErrors((prev) => ({
+        ...prev,
+        agent_id: "სავალდებულო",
+      }));
+    }
+
+    if (!dealType || !region_id || !city_id || !agent_id) return;
+
     createRealEstate({
       ...data,
       agent_id,
@@ -160,10 +221,6 @@ function AddListingPage() {
     const value = event.target.value;
     dispatch(updateDealType(value));
   };
-
-  // useEffect(() => {
-  //   return () => dispatch(resetListingInfo());
-  // }, [dispatch]);
 
   return (
     <div className="wrapper2 pb-[10rem]">
@@ -180,7 +237,7 @@ function AddListingPage() {
           <div className="flex flex-col gap-[0.4rem]">
             <h2 className="text-[1.6rem] font-medium">გარიგების ტიპი</h2>
             <div className="flex items-center gap-[4rem]">
-              <div className="flex gap-[8rem] items-center">
+              <div className="flex gap-[8rem] items-center relative">
                 <label className="custom-radio">
                   <input
                     onChange={handleOptionChange}
@@ -194,7 +251,6 @@ function AddListingPage() {
                     იყიდება
                   </span>
                 </label>
-
                 <label className="custom-radio">
                   <input
                     onChange={handleOptionChange}
@@ -209,6 +265,18 @@ function AddListingPage() {
                     ქირავდება
                   </span>
                 </label>
+                {customErrors?.dealType && (
+                  <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center mt-2">
+                    <img
+                      src={Mark}
+                      alt="mark"
+                      className="w-[1rem] h-[0.8rem]"
+                    />
+                    <p className="text-[1.4rem] text-customRed">
+                      {customErrors?.dealType}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -252,6 +320,7 @@ function AddListingPage() {
                   setSelectedOption={(selectedRegion) =>
                     dispatch(updateSelectedRegion(selectedRegion))
                   }
+                  customErrors={customErrors}
                 />
                 <span
                   className={`${
@@ -266,6 +335,7 @@ function AddListingPage() {
                     setSelectedOption={(selectedCity) =>
                       dispatch(updateSelectedCity(selectedCity))
                     }
+                    customErrors={customErrors}
                   />
                 </span>
               </div>
@@ -343,13 +413,13 @@ function AddListingPage() {
                     })}
                   />
                   {errors["description"] && (
-                    <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center">
+                    <div className="absolute  left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center">
                       <img
                         src={Mark}
                         alt="mark"
                         className="w-[1rem] h-[0.8rem]"
                       />
-                      <p className="text-[1.4rem]" style={{ color: "#021526" }}>
+                      <p className="text-[1.4rem] text-customRed">
                         {errors["description"].message}
                       </p>
                     </div>
@@ -440,7 +510,7 @@ function AddListingPage() {
                       alt="mark"
                       className="w-[1rem] h-[0.8rem]"
                     />
-                    <p className="text-[1.4rem]" style={{ color: "#021526" }}>
+                    <p className="text-[1.4rem] text-customRed">
                       {errors.file.message}
                     </p>
                   </div>
@@ -458,6 +528,7 @@ function AddListingPage() {
                 dispatch(updateSelectedAgent(agent))
               }
               selectedOption={selectedAgent}
+              customErrors={customErrors}
             />
           </div>
         </div>

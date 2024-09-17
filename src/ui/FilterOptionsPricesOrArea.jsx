@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getMaxArea,
@@ -19,6 +19,10 @@ function FilterOptionsPricesOrArea({ values, filter, errors, setErrors }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!minArea || !maxArea) {
+      setErrors({ ...errors, ფართობი: "" });
+      return;
+    }
     if (minArea > maxArea) {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -30,6 +34,10 @@ function FilterOptionsPricesOrArea({ values, filter, errors, setErrors }) {
   }, [minArea, maxArea]);
 
   useEffect(() => {
+    if (!minPrice || !maxPrice) {
+      setErrors({ ...errors, "საფასო კატეგორია": "" });
+      return;
+    }
     if (minPrice > maxPrice) {
       setErrors((prevErrors) => ({
         ...prevErrors,

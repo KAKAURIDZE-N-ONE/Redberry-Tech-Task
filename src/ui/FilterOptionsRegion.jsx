@@ -6,11 +6,7 @@ import { getRegions } from "../services/apiRegionsAndCities";
 import { useEffect } from "react";
 
 function FilterOptionsRegion({ choosedRegions, setChoosedRegions }) {
-  const {
-    data: regions,
-    isPending,
-    error,
-  } = useQuery({
+  const { data: regions, isPending } = useQuery({
     queryKey: ["regions"],
     queryFn: getRegions,
   });

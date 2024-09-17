@@ -23,7 +23,7 @@ function RealEstatePage() {
 
   const { id } = useParams();
 
-  const { data, isPending, error } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["real-estate", id],
     queryFn: () => getRealEstate(id),
   });

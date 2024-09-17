@@ -45,7 +45,7 @@ function FilterOptionsWindow({ filter }) {
     if (filter === "საფასო კატეგორია") {
       if (!errors["საფასო კატეგორია"]) {
         const minPrice = choosedMinPrice || 0;
-        const maxPrice = choosedMaxPrice || 0;
+        const maxPrice = choosedMaxPrice || "infinite";
         const range = String(minPrice) + "-" + String(maxPrice);
         updateFiltersInUrl("price", [range]);
         dispatch(updateMinPrice(""));
@@ -56,7 +56,7 @@ function FilterOptionsWindow({ filter }) {
     if (filter === "ფართობი") {
       if (!errors["ფართობი"]) {
         const minArea = choosedMinArea || 0;
-        const maxArea = choosedMaxArea || 0;
+        const maxArea = choosedMaxArea || "infinite";
         const range = String(minArea) + "-" + String(maxArea);
         updateFiltersInUrl("area", [range]);
         dispatch(updateMinArea(""));

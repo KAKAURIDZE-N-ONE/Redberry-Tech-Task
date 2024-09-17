@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { LuPlus } from "react-icons/lu";
 
-function Button({ children, icon, type, size, fontSize, clickFn, isInForm }) {
+function Button({ children, type, size, fontSize, clickFn, isInForm }) {
   const [isHovering, setIsHovering] = useState(false);
   const backgroundColor =
     type === "filled" && isHovering

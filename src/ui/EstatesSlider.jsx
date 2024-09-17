@@ -27,7 +27,7 @@ const PrevArrow = ({ onClick }) => (
 );
 
 function EstatesSlider({ regionId, currentRealEstateId }) {
-  const { data, isPending, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ["real-estates"],
     queryFn: getRealEstates,
   });

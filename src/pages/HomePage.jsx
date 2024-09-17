@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { updateAgentModalIsOpen } from "../slices/agentSlice";
+import { resetAgentInfo, updateAgentModalIsOpen } from "../slices/agentSlice";
 import Button from "../ui/Button";
 import ChoosedFilters from "../ui/ChoosedFilters";
 import FiltersBar from "../ui/FiltersBar";
@@ -27,7 +27,10 @@ function HomePage() {
             ლისტინგის დამატება
           </Button>
           <Button
-            clickFn={() => dispatch(updateAgentModalIsOpen(true))}
+            clickFn={() => {
+              dispatch(updateAgentModalIsOpen(true));
+              dispatch(resetAgentInfo());
+            }}
             type="outline"
             icon="plus"
           >

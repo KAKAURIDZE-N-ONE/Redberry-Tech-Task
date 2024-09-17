@@ -3,7 +3,8 @@ import ArrowDownIcon from "../../public/svgs/ArrowDown.svg";
 import PlusCircle from "../../public/svgs/PlusCircle.svg";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 import { useDispatch } from "react-redux";
-import { updateAgentModalIsOpen } from "../slices/agentSlice";
+import { resetAgentInfo, updateAgentModalIsOpen } from "../slices/agentSlice";
+import Mark from "../../public/svgs/Mark.svg";
 
 function CustomSelectInput({
   name,
@@ -11,6 +12,7 @@ function CustomSelectInput({
   options,
   setSelectedOption,
   selectedOption,
+  customErrors,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -32,6 +34,30 @@ function CustomSelectInput({
           {label}
         </label>
         <div ref={selectRef} className="w-[38.4rem]">
+          {label === "რეგიონი" && customErrors?.region_id && (
+            <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center mt-2">
+              <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
+              <p className="text-[1.4rem] text-customRed">
+                {customErrors.region_id}
+              </p>
+            </div>
+          )}
+          {label === "ქალაქი" && customErrors?.city_id && (
+            <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center mt-2">
+              <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
+              <p className="text-[1.4rem] text-customRed">
+                {customErrors.city_id}
+              </p>
+            </div>
+          )}
+          {label === "აირჩიე" && customErrors?.agent_id && (
+            <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center mt-2">
+              <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
+              <p className="text-[1.4rem] text-customRed">
+                {customErrors.agent_id}
+              </p>
+            </div>
+          )}
           <div
             className={`relative w-[38.4rem] h-[4.2rem] border border-[#808A93] ${
               isOpen ? "rounded-t-[0.6rem]" : "rounded-[0.6rem]"
@@ -52,7 +78,6 @@ function CustomSelectInput({
               className="absolute right-[1.5rem] top-[50%] transform -translate-y-1/2 w-[1.4rem] h-[1.4rem]"
             />
           </div>
-
           {isOpen && (
             <ul
               style={{ top: "calc(100% - 1px)" }}
@@ -66,6 +91,7 @@ function CustomSelectInput({
                  border-[#808A93] flex  items-center gap-[0.8rem]"
                   onClick={() => {
                     dispatch(updateAgentModalIsOpen(true));
+                    dispatch(resetAgentInfo());
                     setIsOpen(false);
                   }}
                 >

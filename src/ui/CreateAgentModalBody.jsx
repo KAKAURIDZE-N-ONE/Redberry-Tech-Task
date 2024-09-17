@@ -15,13 +15,14 @@ import Button from "./Button";
 import NormalInput from "./NormalInput";
 import { useCreateAgent } from "../hooks/useCreateAgent";
 import ModalLoader from "./ModalLoader";
+import Trash from "../../public/svgs/Trash.svg";
 
 function CreateAgentModalBody() {
   const dispatch = useDispatch();
   const [imagePreview, setImagePreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const { name, surname, email, phone } = useSelector(getAgentDetails);
-  const { mutate: createAgent, isPending, error } = useCreateAgent();
+  const { mutate: createAgent, isPending } = useCreateAgent();
 
   const {
     register,
@@ -192,27 +193,41 @@ function CreateAgentModalBody() {
                 required: "სავალდებულო",
               })}
             />
-            <label htmlFor="file" className="upload-icon">
-              <img src={PlusCircle} className="w-[2.4rem] h-[2.4rem]" />
-            </label>
+            {!imagePreview && (
+              <label htmlFor="file" className="upload-icon">
+                <img src={PlusCircle} className="w-[2.4rem] h-[2.4rem]" />
+              </label>
+            )}
             {imagePreview && (
-              <div
-                style={{
-                  backgroundImage: `url(${imagePreview})`,
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                }}
-                alt="Profile image a"
-                className="w-[9.2rem] h-[8.2rem] absolute
+              <div className="relative w-[9.2rem] h-[8.2rem]">
+                <img
+                  className="absolute -bottom-3 -right-3 w-[2.4rem] h-[2.4rem] z-30"
+                  src={Trash}
+                  alt="Trash btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setImagePreview(null);
+                    setAvatarFile(null);
+                  }}
+                />
+                <div
+                  style={{
+                    backgroundImage: `url(${imagePreview})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                  alt="Profile image a"
+                  className="w-[9.2rem] h-[8.2rem] absolute
                 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[0.4rem]"
-              ></div>
+                ></div>
+              </div>
             )}
           </label>
           {errors.file && (
             <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center mt-2">
               <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
-              <p className="text-[1.4rem]" style={{ color: "#021526" }}>
+              <p className="text-[1.4rem] text-customRed">
                 {errors.file.message}
               </p>
             </div>
