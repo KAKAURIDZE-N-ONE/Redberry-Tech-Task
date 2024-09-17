@@ -10,7 +10,51 @@
   box-sizing: border-box;
 }
 
-/* For WebKit browsers (Chrome, Safari, etc.) */
+@font-face {
+  font-family: "FiraGO";
+  src: url("../../public/fonts/FiraGO-Regular.woff2") format("woff2"),
+    url("../../public/fonts/FiraGO-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FiraGO";
+  src: url("../../public/fonts/FiraGO-Medium.woff2") format("woff2"),
+    url("../../public/fonts/FiraGO-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FiraGO";
+  src: url("../../public/fonts/FiraGO-Bold.woff2") format("woff2"),
+    url("../../public/fonts/FiraGO-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url("../../public/fonts/HelveticaNeue-Medium.otf") format("opentype"),
+    url("../../public/fonts/HelveticaNeue-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "FiraGO", sans-serif;
+}
+
+.font2 {
+  font-family: "Helvetica Neue", sans-serif;
+  /* font-weight: 00; */
+}
+
 ::-webkit-scrollbar {
   height: 2px; /* Set the height of the horizontal scrollbar */
   width: 6px;
@@ -23,10 +67,6 @@
 
 ::-webkit-scrollbar-track {
   background-color: #f1f1f1; /* Color of the scrollbar track */
-}
-
-html {
-  font-size: 62.5%;
 }
 
 .wrapper {
