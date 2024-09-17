@@ -4,6 +4,8 @@ import Vector from "../../public/svgs/Vector.svg";
 import Vector2 from "../../public/svgs/Vector2.svg";
 import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../utils/formatPrice";
+import RentOrSellTeg from "./RentOrSellTeg";
+import { useState } from "react";
 
 function RealEstateListItem({ dataItem, isInSlider }) {
   const {
@@ -17,44 +19,38 @@ function RealEstateListItem({ dataItem, isInSlider }) {
     zip_code,
     id,
   } = dataItem;
-  const navigate = useNavigate();
+  const [isDragging, setIsDragging] = useState(false);
 
+  const navigate = useNavigate();
   function handleRealEstateClick() {
+    if (isDragging) return;
     navigate(`/listing/${id}`);
     if (isInSlider) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
 
+  const handleMouseDown = () => setIsDragging(false);
+  const handleMouseMove = () => setIsDragging(true);
+  const handleMouseUp = () => {
+    setTimeout(() => {
+      setIsDragging(false);
+    }, 10);
+  };
   const type = is_rental ? "ქირავდება" : "იყიდება";
 
   return (
     <div
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
       onClick={handleRealEstateClick}
       className="rounded-[1.4rem] cursor-pointer 
       no-select hover:shadow-custom-light shadow-none transition-all duration-200"
       draggable={false}
     >
       <div className="relative">
-        <div
-          className="absolute flex items-center justify-center top-[2rem] py-[0.6rem] px-[1.2rem] left-[2rem]
-                rounded-full"
-          style={{ backgroundColor: "#02152680" }}
-        >
-          <div className="relative">
-            <div className="opacity-50">
-              <h4 className="font-medium text-white text-[1.2rem] tracking-wide opacity-0">
-                {type}
-              </h4>
-            </div>
-            <h4
-              className=" top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                  absolute font-medium text-white text-[1.2rem] tracking-wide opacity-1"
-            >
-              {type}
-            </h4>
-          </div>
-        </div>
+        <RentOrSellTeg type={type} />
         <div
           className="rounded-t-[1.4rem] select-none"
           style={{

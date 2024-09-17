@@ -5,6 +5,7 @@ import ChoosedFilters from "../ui/ChoosedFilters";
 import FiltersBar from "../ui/FiltersBar";
 import RealEstatesList from "../ui/RealEstatesList";
 import { useDispatch } from "react-redux";
+import { resetListingInfo } from "../slices/listingSlice";
 
 function HomePage() {
   const dispatch = useDispatch();
@@ -16,7 +17,10 @@ function HomePage() {
         <FiltersBar />
         <div className="flex gap-[1.6rem]">
           <Button
-            clickFn={() => navigate("/add-listing")}
+            clickFn={() => {
+              dispatch(resetListingInfo());
+              navigate("/add-listing");
+            }}
             type="filled"
             icon="plus"
           >

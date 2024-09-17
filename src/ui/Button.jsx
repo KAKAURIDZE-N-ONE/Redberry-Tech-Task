@@ -14,7 +14,6 @@ function Button({ children, icon, type, size, fontSize, clickFn, isInForm }) {
       ? "#808A93"
       : "#fff";
 
-  console.log(backgroundColor);
   const borderColor =
     type === "filled" ? "#F93B1D" : type === "erase" ? "#676E76" : "#F93B1D";
   const color =

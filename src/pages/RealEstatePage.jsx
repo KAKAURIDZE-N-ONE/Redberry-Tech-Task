@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getRealEstate } from "../services/apiRealEstates";
 import { formatPrice } from "../utils/formatPrice";
 import { formatDateFromTimestamp } from "../utils/formatDate";
+import RentOrSellTeg from "../ui/RentOrSellTeg";
 
 function RealEstatePage() {
   const [deleteListingModalIsOpen, setDeleteListingModalIsOpen] =
@@ -33,8 +34,15 @@ function RealEstatePage() {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
+  const type = data?.is_rental ? "ქირავდება" : "იყიდება";
+
   return (
     <div className="wrapper pb-96">
+      {isPending && (
+        <Modal turnOfFn={() => {}}>
+          <span className="loader"></span>
+        </Modal>
+      )}
       {deleteListingModalIsOpen && (
         <Modal turnOfFn={() => setDeleteListingModalIsOpen(false)}>
           <DeleteListingModalBody
@@ -56,7 +64,11 @@ function RealEstatePage() {
       {/* Main content */}
       <div className="flex gap-[6.8rem] mt-10">
         {/* Image */}
-        <div style={{ width: "55%", aspectRatio: "1.250" }}>
+        <div
+          className="relative"
+          style={{ width: "55%", aspectRatio: "1.250" }}
+        >
+          <RentOrSellTeg type={type} size="big" />
           <div
             style={{
               backgroundImage: `url(${data?.image})`,
@@ -74,7 +86,7 @@ function RealEstatePage() {
             <div className="flex flex-col gap-[2.4rem]">
               {/* Price */}
               <h1 className="text-[4.8rem] font-bold">
-                {formatPrice(data?.price)} ₾
+                {data?.price && `${formatPrice(data?.price)} ₾`}
               </h1>
 
               {/* Property Information */}

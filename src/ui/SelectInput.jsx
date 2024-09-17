@@ -56,7 +56,7 @@ function CustomSelectInput({
           {isOpen && (
             <ul
               style={{ top: "calc(100% - 1px)" }}
-              className="absolute w-[38.4rem] border border-[#808A93] rounded-b-[0.6rem] bg-white z-10"
+              className="absolute w-[38.4rem] max-h-[20rem] overflow-auto border border-[#808A93] rounded-b-[0.6rem] bg-white z-10"
               onClick={(e) => e.preventDefault()}
             >
               {name === "agent" && (

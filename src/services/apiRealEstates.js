@@ -1,4 +1,4 @@
-const token = "9d009a62-3ec5-4bd6-b69a-d080adf646d8";
+const token = "9d072ffa-2860-46a3-bb57-32655cd6a086";
 
 export async function createRealEstate({
   region_id,
@@ -25,20 +25,6 @@ export async function createRealEstate({
   formData.append("is_rental", is_rental);
   formData.append("image", image);
   formData.append("description", description);
-
-  //   console.log(
-  //     region_id,
-  //     price,
-  //     zip_code,
-  //     area,
-  //     city_id,
-  //     address,
-  //     agent_id,
-  //     bedrooms,
-  //     is_rental,
-  //     image,
-  //     description
-  //   );
 
   try {
     const res = await fetch(
@@ -102,6 +88,7 @@ export async function getRealEstate(id) {
 }
 
 export async function deleteRealEstate(id) {
+  console.log(id);
   try {
     const res = await fetch(
       `https://api.real-estate-manager.redberryinternship.ge/api/real-estates/${id}`,

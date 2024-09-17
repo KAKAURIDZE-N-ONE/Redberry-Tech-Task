@@ -14,17 +14,14 @@ import {
 import Button from "./Button";
 import NormalInput from "./NormalInput";
 import { useCreateAgent } from "../hooks/useCreateAgent";
+import ModalLoader from "./ModalLoader";
 
 function CreateAgentModalBody() {
   const dispatch = useDispatch();
   const [imagePreview, setImagePreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const { name, surname, email, phone } = useSelector(getAgentDetails);
-  const {
-    mutate: createAgent,
-    isLoading: isCreating,
-    error: creationError,
-  } = useCreateAgent();
+  const { mutate: createAgent, isPending, error } = useCreateAgent();
 
   const {
     register,
@@ -95,8 +92,10 @@ function CreateAgentModalBody() {
   return (
     <div
       style={{ zIndex: "2000" }}
-      className="bg-white opacity-100 relative rounded-[1rem] py-[8rem] px-[11rem]"
+      className="bg-white opacity-100 relative rounded-[1rem] py-[8rem] px-[11rem] overflow-hidden"
     >
+      {isPending && <ModalLoader />}
+
       <h2
         style={{ color: "#021526" }}
         className="text-[3.2rem] font-medium text-center"

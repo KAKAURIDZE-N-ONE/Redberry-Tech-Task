@@ -30,7 +30,10 @@ function FilterOptionsRegion({ choosedRegions, setChoosedRegions }) {
   }
 
   return (
-    <ul className="grid grid-rows-4 grid-flow-col gap-x-[5rem] gap-y-[1.5rem] mr-[6rem]">
+    <ul className="grid grid-rows-4 grid-flow-col gap-x-[5rem] gap-y-[1.5rem] mr-[6rem] relative">
+      {isPending && (
+        <span className="loader2 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"></span>
+      )}
       {regions?.map((value) => (
         <li
           onClick={() => handleCheckMarkClick(value.name)}

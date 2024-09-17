@@ -71,7 +71,7 @@ function FilterOptionsWindow({ filter }) {
   }
 
   return (
-    <div className="p-[2.4rem] flex flex-col gap-[2.4rem] relative bg-white z-10">
+    <div className="p-[2.4rem] flex flex-col gap-[2.4rem] relative bg-white z-[400]">
       <h2 className="text-[1.6rem] font-medium text-nowrap mr-6">{title}</h2>
       {lastOpenedFilter === "რეგიონი" && (
         <FilterOptionsRegion

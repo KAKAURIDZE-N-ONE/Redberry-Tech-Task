@@ -21,7 +21,7 @@ function NormalInput({ register, name, label, errors, validate }) {
           {errors[name] && (
             <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center">
               <img src={Mark} alt="mark" className="w-[1rem] h-[0.8rem]" />
-              <p className="text-[1.4rem]" style={{ color: "#021526" }}>
+              <p className="text-[1.4rem] text-customRed">
                 {errors[name].message}
               </p>
             </div>

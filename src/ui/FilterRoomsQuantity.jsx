@@ -5,11 +5,8 @@ function FilterRoomsQuantity({ values, choosedBedrooms, setChoosedBedrooms }) {
   const activeBedrooms = useGetActiveFilterValues("bedrooms");
 
   useEffect(() => {
-    console.log(activeBedrooms);
     setChoosedBedrooms(activeBedrooms);
   }, []);
-
-  console.log(choosedBedrooms);
 
   function handleValueClick(value) {
     if (!value) return;

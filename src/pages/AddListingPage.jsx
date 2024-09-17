@@ -9,9 +9,10 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCities, getRegions } from "../services/apiRegionsAndCities";
 import { useDispatch, useSelector } from "react-redux";
+import Trash from "../../public/svgs/Trash.svg";
+import Modal from "../ui/Modal";
 import {
   getListingFormDetails,
-  resetListingInfo,
   updateAddress,
   updateArea,
   updateDealType,
@@ -28,6 +29,7 @@ import { validateWordLength } from "../utils/validation";
 import { useCreateRealEstate } from "../hooks/useCreateRealEstate";
 
 function AddListingPage() {
+  const [customErrors, setCustomErrors] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const {
@@ -43,34 +45,21 @@ function AddListingPage() {
     description,
   } = useSelector(getListingFormDetails);
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const { mutate: createRealEstate, isPending, error } = useCreateRealEstate();
 
-  const {
-    data: agentsData,
-    error: agentsError,
-    isLoading: agentsIsLoading,
-  } = useQuery({
+  const { data: agentsData } = useQuery({
     queryKey: ["agents"],
     queryFn: getAgents,
   });
 
-  const {
-    data: regionsData,
-    error: regionsError,
-    isLoading: regionsIsLoading,
-  } = useQuery({
+  const { data: regionsData } = useQuery({
     queryKey: ["regions"], // or ["regions"] if that's what you're querying
     queryFn: getRegions, // Function that fetches the data
   });
 
-  const {
-    data: citiesData,
-    error: citiesError,
-    isLoading: citiesIsLoading,
-  } = useQuery({
+  const { data: citiesData } = useQuery({
     queryKey: ["cities"], // or ["regions"] if that's what you're querying
     queryFn: getCities, // Function that fetches the data
   });
@@ -147,6 +136,10 @@ function AddListingPage() {
     }
   }, [fileValue]);
 
+  useEffect(() => {
+    dispatch(updateSelectedCity(""));
+  }, [selectedRegion, dispatch]);
+
   const { id: agent_id } = selectedAgent;
   const { id: city_id } = selectedCity;
   const { id: region_id } = selectedRegion;
@@ -168,12 +161,17 @@ function AddListingPage() {
     dispatch(updateDealType(value));
   };
 
-  useEffect(() => {
-    return () => dispatch(resetListingInfo());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   return () => dispatch(resetListingInfo());
+  // }, [dispatch]);
 
   return (
     <div className="wrapper2 pb-[10rem]">
+      {isPending && (
+        <Modal turnOfFn={() => {}}>
+          <span className="loader"></span>
+        </Modal>
+      )}
       <h1 className="text-[3.2rem] font-medium text-center mt-[5rem]">
         ლისტინგის დამატება
       </h1>
@@ -255,15 +253,21 @@ function AddListingPage() {
                     dispatch(updateSelectedRegion(selectedRegion))
                   }
                 />
-                <SelectInput
-                  label="ქალაქი"
-                  name="city"
-                  options={filteredCitiesData}
-                  selectedOption={selectedCity}
-                  setSelectedOption={(selectedCity) =>
-                    dispatch(updateSelectedCity(selectedCity))
-                  }
-                />
+                <span
+                  className={`${
+                    selectedRegion?.id ? "inline-block" : "hidden"
+                  }`}
+                >
+                  <SelectInput
+                    label="ქალაქი"
+                    name="city"
+                    options={filteredCitiesData}
+                    selectedOption={selectedCity}
+                    setSelectedOption={(selectedCity) =>
+                      dispatch(updateSelectedCity(selectedCity))
+                    }
+                  />
+                </span>
               </div>
             </div>
           </div>
@@ -398,21 +402,35 @@ function AddListingPage() {
                       },
                     })}
                   />
-                  <label htmlFor="file" className="upload-icon">
-                    <img src={PlusCircle} className="w-[2.4rem] h-[2.4rem]" />
-                  </label>
+                  {!imagePreview && (
+                    <label htmlFor="file" className="upload-icon">
+                      <img src={PlusCircle} className="w-[2.4rem] h-[2.4rem]" />
+                    </label>
+                  )}
                   {imagePreview && (
-                    <div
-                      style={{
-                        backgroundImage: `url(${imagePreview})`,
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center",
-                      }}
-                      alt="Profile image a"
-                      className="w-[9.2rem] h-[8.2rem] absolute
+                    <div className="relative w-[9.2rem] h-[8.2rem]">
+                      <img
+                        className="absolute -bottom-3 -right-3 w-[2.4rem] h-[2.4rem] z-30"
+                        src={Trash}
+                        alt="Trash btn"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setImagePreview(null);
+                          setAvatarFile(null);
+                        }}
+                      />
+                      <div
+                        style={{
+                          backgroundImage: `url(${imagePreview})`,
+                          backgroundSize: "cover",
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center",
+                        }}
+                        alt="Profile image a"
+                        className="w-[9.2rem] h-[8.2rem] absolute
                 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[0.4rem]"
-                    ></div>
+                      ></div>
+                    </div>
                   )}
                 </label>
                 {errors.file && (
