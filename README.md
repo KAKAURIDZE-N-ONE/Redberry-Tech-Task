@@ -7,6 +7,7 @@
 - `public`
   - `frequentQuestions.js`
      - `svgs`
+     - `fonts`
 - `src`
   - `hooks` : This folder contains some mutation and query custom hooks.
   - `pages`
@@ -22,6 +23,7 @@
      - `listingSlice.js`
      - `filtersSlice.js`
   - `ui` : This folder contains layout, modal and reusable components.
+  - `utils` : This folder contains formatting functions.
 - `styles`
   - `index.css` : This CSS file contains reusable classes, loaders and some custom styles.
 
