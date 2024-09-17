@@ -7,6 +7,7 @@
 - `public`
   - `frequentQuestions.js`
      - `svgs`
+     - `fonts`
 - `src`
   - `hooks` : This folder contains some mutation and query custom hooks.
   - `pages`
