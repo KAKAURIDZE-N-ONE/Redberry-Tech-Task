@@ -1,53 +1,67 @@
-# TBC x USAID technical task
+# Redberry Technical Task
 
-[Website link](https://monumental-nougat-3e3f2a.netlify.app)
+[Website link](https://redberrytask.netlify.app)
 
 ## Project structure
 
-- `imgs`
-- `js`
+- `public`
   - `frequentQuestions.js`
-  - `functions.js`
-  - `navBarAndHamburgerMenu.js`
-  - `sliders.js` : This takes care of both mobile and desktop sliders
+     - `svgs`
+- `src`
+  - `hooks` : This folder contains some mutation and query custom hooks.
+  - `pages`
+     - `HomePage.jsx`
+     - `RealEstatePage.jsx`
+     - `AddListingPage.jsx`
+  - `services`
+     - `apiAgents.js`
+     - `apiRealEstates.js`
+     - `apiRegionsAndCities.js`
+  - `slices`
+     - `agentSlice.js`
+     - `listingSlice.js`
+     - `filtersSlice.js`
+  - `ui` : This folder contains layout, modal and reusable components.
 - `styles`
-  - `general.css` : This CSS file contains all reusable classes.
-  - `mobileNavBar.css`
-  - `queries.css` : This CSS file contains mobile queries
-  - `style.css` : This is the main CSS file
-- `svgs`
+  - `index.css` : This CSS file contains reusable classes, loaders and some custom styles.
 
 ## Technologies used
 
-- **HTML**
-- **CSS**
-- **JavaScript**
+- **React JS**
+- **Tailwind CSS**
+- **Redux Toolkit**
+- **Redux Persist**
+- **React Router**
+- **React Query**
+- **React Hook Form**
+- **React Slick**
+- **Slick Carousel**
+- **React Icons**
 
 ## Running the project
 
 **Clone the Repository:**
 
 ```
-git clone https://github.com/KAKAURIDZE-N-ONE/TBC-project.git
+git clone https://github.com/KAKAURIDZE-N-ONE/TBC-project.git](https://github.com/KAKAURIDZE-N-ONE/Redberry-Tech-Task.git
 ```
 
 **Navigate to the Project Directory:**
 
 ```
-cd TBC-project
+cd Redberry-Tech-Task
 ```
 
-**Open `index.html` in a web browser**
+**Install node_modules:**
 
-- Open the file with the browser of your choice.
+```
+npm i
+```
 
-## Additional info
+**Run Project:**
 
-The mobile version of my website has a fixed width of 320px, because TBC x USAID uses the same dimensions.
-The mobile version is up to 1600 pixels as in the original.
+```
+npm run dev
+```
 
-Just to be clear my website has all the functionalities as the original one.
 
-# Important !
-
-You must refresh page every time you change width in inspect element as original one.
