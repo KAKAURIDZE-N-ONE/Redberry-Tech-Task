@@ -12,6 +12,8 @@ const initialState = {
     area: "",
     roomsQuantity: "",
     description: "",
+    imagePreview: null,
+    imageName: "",
   },
 };
 
@@ -49,6 +51,12 @@ const listingSlice = createSlice({
     updateDescription(state, action) {
       state.listingFormDetails.description = action.payload;
     },
+    updateImagePreview(state, action) {
+      state.listingFormDetails.imagePreview = action.payload;
+    },
+    updateImageName(state, action) {
+      state.listingFormDetails.imageName = action.payload;
+    },
     resetListingInfo(state) {
       state.listingFormDetails = initialState.listingFormDetails;
     },
@@ -67,6 +75,8 @@ export const {
   updateRoomsQuantity,
   updateDescription,
   resetListingInfo,
+  updateImagePreview,
+  updateImageName,
 } = listingSlice.actions;
 
 export const getListingFormDetails = (store) =>

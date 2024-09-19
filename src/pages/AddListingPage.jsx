@@ -17,6 +17,8 @@ import {
   updateArea,
   updateDealType,
   updateDescription,
+  updateImageName,
+  updateImagePreview,
   updatePrice,
   updateRoomsQuantity,
   updateSelectedAgent,
@@ -27,6 +29,7 @@ import {
 import { getAgents } from "../services/apiAgents";
 import { validateWordLength } from "../utils/validation";
 import { useCreateRealEstate } from "../hooks/useCreateRealEstate";
+import convertImagePreviewToFile from "../utils/convertImagePreviewToFile";
 
 function AddListingPage() {
   const [customErrors, setCustomErrors] = useState({
@@ -35,7 +38,6 @@ function AddListingPage() {
     agent_id: "",
     dealType: "",
   });
-  const [imagePreview, setImagePreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
   const {
     selectedRegion,
@@ -48,7 +50,14 @@ function AddListingPage() {
     area,
     roomsQuantity,
     description,
+    imagePreview,
+    imageName,
   } = useSelector(getListingFormDetails);
+
+  let newFile;
+  if ((imagePreview, imageName))
+    newFile = convertImagePreviewToFile(imagePreview, imageName);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -77,6 +86,7 @@ function AddListingPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     watch,
   } = useForm({
@@ -87,8 +97,16 @@ function AddListingPage() {
       area,
       roomsQuantity,
       description,
+      file:
+        imagePreview && imageName ? { 0: newFile, length: 1 } : { length: 0 },
     },
   });
+
+  useEffect(() => {
+    if (!imagePreview || !imageName) {
+      setValue("file", null);
+    }
+  }, [imagePreview, imageName, setValue]);
 
   const addressValue = watch("address");
   const zipAddressValue = watch("zipAddress");
@@ -131,19 +149,13 @@ function AddListingPage() {
         setAvatarFile(file);
         const reader = new FileReader();
         reader.onloadend = () => {
-          setImagePreview(reader.result);
+          dispatch(updateImageName(file.name));
+          dispatch(updateImagePreview(reader.result));
         };
         reader.readAsDataURL(file);
       }
-    } else {
-      setImagePreview(null);
-      setAvatarFile(null);
     }
-  }, [fileValue]);
-
-  useEffect(() => {
-    dispatch(updateSelectedCity(""));
-  }, [selectedRegion, dispatch]);
+  }, [fileValue, dispatch]);
 
   const { id: agent_id } = selectedAgent;
   const { id: city_id } = selectedCity;
@@ -443,8 +455,11 @@ function AddListingPage() {
                     id="file"
                     className="file-input"
                     {...register("file", {
-                      required: "სავალდებულო",
                       validate: {
+                        essential: (fileList) => {
+                          const file = fileList?.[0];
+                          return file || "სავალდებულო";
+                        },
                         image: (fileList) => {
                           // Ensure the fileList is not empty and contains valid file type
                           const file = fileList?.[0];
@@ -485,7 +500,8 @@ function AddListingPage() {
                         alt="Trash btn"
                         onClick={(e) => {
                           e.preventDefault();
-                          setImagePreview(null);
+                          dispatch(updateImagePreview(null));
+                          dispatch(updateImageName(""));
                           setAvatarFile(null);
                         }}
                       />
@@ -503,7 +519,7 @@ function AddListingPage() {
                     </div>
                   )}
                 </label>
-                {errors.file && (
+                {errors?.file && errors?.file?.message !== "" && (
                   <div className="absolute left-0 bottom-[-2.1rem] flex gap-[0.7rem] items-center mt-2">
                     <img
                       src={Mark}
@@ -511,7 +527,7 @@ function AddListingPage() {
                       className="w-[1rem] h-[0.8rem]"
                     />
                     <p className="text-[1.4rem] text-customRed">
-                      {errors.file.message}
+                      {errors?.file?.message}
                     </p>
                   </div>
                 )}

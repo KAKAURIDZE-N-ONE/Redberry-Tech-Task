@@ -5,6 +5,7 @@ import { useOutsideClick } from "../hooks/useOutsideClick";
 import { useDispatch } from "react-redux";
 import { resetAgentInfo, updateAgentModalIsOpen } from "../slices/agentSlice";
 import Mark from "../../public/svgs/Mark.svg";
+import { updateSelectedCity } from "../slices/listingSlice";
 
 function CustomSelectInput({
   name,
@@ -108,7 +109,10 @@ function CustomSelectInput({
                   key={option.id}
                   className="px-4 py-3 text-[1.6rem] cursor-pointer hover:bg-gray-100 border-b last:border-none
                  border-[#808A93]"
-                  onClick={() => handleSelectOption(option)}
+                  onClick={() => {
+                    if (name === "region") dispatch(updateSelectedCity(""));
+                    handleSelectOption(option);
+                  }}
                 >
                   {name === "agent"
                     ? option.name + " " + option.surname
