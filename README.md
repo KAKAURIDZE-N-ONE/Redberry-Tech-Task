@@ -45,7 +45,7 @@
 **Clone the Repository:**
 
 ```
-git clone https://github.com/KAKAURIDZE-N-ONE/TBC-project.git](https://github.com/KAKAURIDZE-N-ONE/Redberry-Tech-Task.git
+git clone https://github.com/KAKAURIDZE-N-ONE/Redberry-Tech-Task.git
 ```
 
 **Navigate to the Project Directory:**
